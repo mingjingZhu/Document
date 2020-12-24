@@ -6,7 +6,9 @@
 
 ### 为什么前端要学习node
 
-如何实现像nextjs那样的约定路由功能
+如何实现像nextjs那样的约定路由功能，
+
+vue里面可以实现对路由自动配置
 
 
 
@@ -41,6 +43,8 @@ bin 字段是命令名到本地文件名的映射
    4. **chalk : ** 粉笔， 改变文字的颜色
    5. **download-git-repo : ** 直接从git上下载东西
    6. **ora :** 转啊转
+   7. **open** : 自动打开浏览器
+   8. **handlebars** : 
 
    ```js
    // 结合 Await/Async 使用
@@ -85,5 +89,36 @@ bin 字段是命令名到本地文件名的映射
 
 5. 克隆一个基础库，一般项目位于github或者gitlab上。
 
-48min
+6. 项目克隆好了之后，实现自动安装项目相关依赖。
+
+   1. 需要将子进程的输出流和主进程输出流对接。
+
+   ```js
+   // spawn方式是原生就有的，但是此处我们需要改写一下，将子进程的输出流插入到主进程的输出流中，这样子进程的打印才能在控制面板中看到
+   const spawn = async (...args) => {
+     const { spawn } = require('child_process')
+     return new Promise(resolve => {
+       const proc = spawn(...args);
+       // 插水管
+       proc.stdout.pipe(process.stdout) // process描述我们当前所启动的进程
+       proc.stderr.pipe(process.stderr)
+       proc.on('close', () => {
+         resolve();
+       })
+     })
+   }
+   
+   // 启动项目 克隆的项目执行命令是 npm run serve  cwd： 进入的目录，从你当前文件进入到项目的路径
+   await spawn('npm', ['run', 'serve'], {cwd: `./${name}`}) // spawn中的参数其实就是你在shell中输入的内容
+   // bash  其实是shell的一种
+   ```
+
+7. 自动打开浏览器。
+
+```js
+const open = require('open');
+open(浏览器url)
+```
+
+8. 实现约定路由功能
 
