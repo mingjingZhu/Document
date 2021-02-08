@@ -1,4 +1,9 @@
+配置文件路径：/usr/local/etc/nginx/nginx.conf
+
+
+
 ### nginx的作用
+
 1. 静态HTTP服务器：
 2. 反向代理
     1. 负载均衡

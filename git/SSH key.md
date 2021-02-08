@@ -51,6 +51,24 @@ pbcopy < ~/.ssh/github.pub
 
 
 
+
+
+### 重新配置gitlab ssh key
+
+1. 删除原有的ssh key
+
+   在MAC电脑左上角点击“前往”，在弹出的输入框中输入"~/.ssh",然后点击前往，即可进入本地电脑的ssh文件目录，删除存在的ssh key,只需要将目录下的id_rsa、id_rsa.pub删除，其中的know_hosts文件，有时需要删除，有时不需要，如果不确定可以直接删除，会自动生成的。
+
+2. 生成ssh key
+
+   ```js
+   $ ssh-keygen -t rsa -C "你的注册邮箱@xxx.com"
+   ```
+
+   为了方便，全程回车即可（这个过程中会出现诸如key pair，passphrase等的请求，一律回车即可）。
+
+3. 将id_rsa.pub中内容复制粘贴到gitlab的SSH Keys中即可，gitlab sshkey中的title可以随便定义。
+
 ---
 
 参考文档
