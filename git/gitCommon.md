@@ -26,3 +26,23 @@ git pull --rebase origin master
 
 
 
+#### git submodule
+
+首次需要执行命令：git submodule update --init --recursive
+
+##### 2. 删除子模块
+
+rm -rf 子模块目录     删除子模块目录及源码
+
+vi .gitmodules 删除项目目录下.gitmodules文件中子模块相关条目
+
+vi .git/config 删除配置项中子模块相关条目
+
+rm .git/module/需要删除的子模块(子模块后面不需要加/)
+
+git rm --cached 子模块名称（可有可无？）
+
+完成删除后，提交到仓库即可。
+
+
+

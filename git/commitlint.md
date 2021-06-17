@@ -91,6 +91,17 @@ subject是 commit 目的的简短描述，不超过50个字符。
     echo '{ "path": "cz-conventional-changelog" }' > ~/.czrc
    ```
 
+   or  package.json中添加
+
+   ```j
+   "config": {
+   		"commitizen": {
+   			"path": "cz-conventional-changelog",
+   			"maxHeaderWidth": 200
+   		}
+   	},
+   ```
+
 3. 这时就可以全局使用 git cz 命令来代替 git commit 命令了
 
 ###### 项目级安装

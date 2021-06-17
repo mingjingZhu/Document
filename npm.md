@@ -68,3 +68,189 @@ npm dist-tag add my-package@1.0.0 latest
 
 这样就万事大吉了。
 
+
+
+
+
+#### yarn unlink
+
+- yarn link 前 需要保证你的nodelmodues 或者 lib.js 最新，就说要build一下，在执行yarn link。
+
+- 运行完`yarn unlink [package]`. 您将需要运行 `yarn` 或者 `yarn install` 来重新安装已链接的软件包。
+
+- 先执行`yarn unlink` 再执行`yarn unlink [package]`
+- link 的本质就是软链接，这样可以让我们快速使用本地正在开发的其它包。
+- 当我们在`npm install -g`的时候，其实是将相关文件安装在`/usr/local/lib/node_modules`目录下，同时在全局命令`/usr/local/bin`目录下会有一个映射脚本，将其指向/usr/local/lib下的真实文件。这么做的好处是，可以在保证只有一份可执行文件的前提下，给命令取别名。
+
+判断link成功：
+
+
+
+**### 版本管理**
+
+开发 or 测试: yarn link
+
+预备上线前: 走非正式版本, 比如: 1.6.34.alpha.0
+
+\```
+
+/**
+
+ \* crement alpha version
+
+ \* before v1.0.1-alpha.0
+
+ \* after v1.0.1-alpha.1
+
+*/
+
+$ npm version prerelease --preid=alpha
+
+
+
+/**
+
+ \* crement prepatch alpha version
+
+ \* before v1.0.1-alpha.1
+
+ \* after v1.0.2-alpha.0
+
+*/ 
+
+$ npm version prepatch --preid=alpha
+
+
+
+$ npm publish --tag alpha
+
+
+
+\```
+
+正式上线: 走正式版本号
+
+
+
+\- 完成开发后，版本发布 
+
+\```
+
+$ nrm use ez  
+
+$ npm version patch // minor | major  
+
+$ npm publish  
+
+\```
+
+
+
+
+
+
+
+
+
+**修改版本号**
+`npm version major` : 主版本号加 1，其余版本号归 0。
+`npm version minor` : 次版本号加 1，修订号归 0。
+`npm version patch` : 修订号加 1。
+`npm version 版本号` : 设置版本号为指定的版本号
+`npm version prerelease` : 先行版本号增加1
+`npm version prerelease --preid=<prerelease-id>` : 指定先行版本的名字
+
+```js
+// 假定现在的版本号是1.1.1
+npm version major  // 2.0.0
+npm version minor  // 1.2.0
+npm version patch  // 1.1.2
+npm version prerelease // 1.1.2-0
+npm version prerelease --preid=alpha // 1.1.2-alpha.0
+npm version 4.1.2  // 4.1.2
+```
+
+
+
+
+
+
+
+
+
+major：主版本号
+
+minor：次版本号
+
+patch：补丁号
+
+premajor：预备主版本
+
+prepatch：预备次版本
+
+prerelease：预发布版本
+
+我的package.jsond的**当前version为6.0.0**，依次输入下面的命令，package的version会变更为提升后的版本号：
+
+```
+C:\Users\Administrator\Desktop\work\stage-view (master) (stage-view@6.0.0)
+npm version preminor
+v6.1.0-0
+C:\Users\Administrator\Desktop\work\stage-view (master) (stage-view@6.1.0-0)
+npm version minor
+v6.1.0
+C:\Users\Administrator\Desktop\work\stage-view (master) (stage-view@6.1.0)
+npm version prepatch
+v6.1.1-0
+C:\Users\Administrator\Desktop\work\stage-view (master) (stage-view@6.1.1-0)
+npm version patch
+v6.1.1
+C:\Users\Administrator\Desktop\work\stage-view (master) (stage-view@6.1.1)
+npm version prerelease
+v6.1.2-0
+C:\Users\Administrator\Desktop\work\stage-view (master) (stage-view@6.1.2-0)
+npm version premajor
+v7.0.0-0
+C:\Users\Administrator\Desktop\work\stage-view (master) (stage-view@7.0.0-0)
+npm version major
+v7.0.0
+```
+
+
+
+### tag
+
+`npm` 中的 `tag` 类似于 `git` 中的 `branch` ，发布者可以在指定的 `tag` 上进行发版，使用者可以选择指定 `tag` 来安装，默认的`tag`是 `latest`。这对于我们日常开发非常有用，很多时候我们想要发布版本来进行验证功能，但是又不想影响正在使用的人，我们就可以利用tag和先行版本来进行发包。
+
+```js
+npm publish --tag alpha  // 发版到名为alpha的tag上
+npm i <package>@<tag>    // 从指定tag上安装包
+```
+
+
+
+
+
+npm unpublish z-tool@1.0.0 删除某个版本
+
+npm unpublish的推荐替代命令：npm deprecate <pkg>[@<version>] <message>
+
+使用这个命令，并不会在社区里撤销你已有的包，但会在任何人尝试安装这个包的时候得到警告
+例如：npm deprecate z-tool '这个包我已经不再维护了哟～'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

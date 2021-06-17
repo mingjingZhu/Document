@@ -8,54 +8,6 @@ npm run eject
 
 \```
 
-###  react-app-rewired
-
-  2.1 安装react-app-rewired
-
- \```js
-
-  npm install react-app-rewired --save-dec
-
-  \```
-
-  2.2 在 package.json 中，将原本的 react-script 改为 react-app-rewired
-
-  \```js
-
-  "scripts": {
-
-​    "start": "react-app-rewired start",
-
-​    "build": "react-app-rewired build",
-
-​    "test": "react-app-rewired test",
-
-​    "eject": "react-app-rewired eject"
-
-  }
-
-  \```
-
-  在根目录下新建config-overrides.js,在config-overrides.js里更改配置项，项目启动的时候会先在config-overrides.js里读数据，对webpack里的默认文件进行整合，最后才会启动。
-
-
-
-  要对 webpack 配置，还需要安装 customize-cra 包
-
-
-
-  \```js
-
-npm install customize-cra --save-dev
-
-  \```
-
-
-
-  customize-cra 利用 react-app-rewired 和 config-overrides.js 文件。通过导入customize-cra 函数并导出包装在我们的 override 函数中的一些函数调用，您可以轻松地修改构成 create-react-app 的基础配置对象（webpack，webpack-dev-server，babel等）。
-
-
-
 ### react 项目添加ts支持
 
 1. 全局安装ts，便于使用  `tsc`  命令行工具。
@@ -81,4 +33,61 @@ npm install customize-cra --save-dev
 
    其中，`ts-loader`是typescript的webpack loader。
     `@types/react`和`@types/react-dom`，是`react`和`react-dom`的[Declaration Files](https://link.jianshu.com?t=https://www.typescriptlang.org/docs/handbook/declaration-files/introduction.html)。
+
+
+
+#### react中使用scss
+
+> css modul 相关介绍
+>
+> 是什么？在项目构建过程中对css类名选择器限定作用域的一种方法
+>
+> 原理：在构建时可以为每个class生成一个独一无二的哈希字符串类名，实现局部性原理。
+>
+> 怎么用？配合webpack一起使用，在webpack.config.js文件中进行配置。
+
+1. 使用create-react-app安装完项目之后。执行npm install sass-loader node-sass --save-dev 安装sass这两个相关的插件，相应的webpack脚手架已经配置好了。(注意node的版本)。
+
+2. 上面完成之后react项目就可以支持scss文件的import了，但是不支持`CSS Modules`  import ss from "./index.scss"这种写法。下面介绍css modules使用方法：
+
+   2.1 webpack.config.js   test: /\.(scss|sass)$/  中添加 modules:``true``, 详情下面代码：
+
+   ```js
+   {
+     test: /\.(scss|sass)$/,
+       exclude: sassModuleRegex,
+         use: getStyleLoaders(
+           {
+             importLoaders: 3,
+             modules: true, // 是我哦
+             sourceMap: isEnvProduction
+             ? shouldUseSourceMap
+             : isEnvDevelopment,
+           },
+           'sass-loader'
+         ),
+           sideEffects: true,
+   },
+   ```
+
+3. 此时可以使用css modules了，但是检查页面元素的时候，生成的类名看不懂。可以配置一下 localIdentName。
+
+   ```js
+   {
+     test: /\.(scss|sass)$/,
+       exclude: sassModuleRegex,
+         use: getStyleLoaders(
+           {
+             importLoaders: 3,
+             sourceMap: isEnvProduction
+             ? shouldUseSourceMap
+             : isEnvDevelopment,
+             modules: {
+               localIdentName: "[local]_[hash:base64:5]",
+             }
+           },
+           'sass-loader'
+        	),
+   }
+   ```
 
